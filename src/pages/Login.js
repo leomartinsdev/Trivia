@@ -38,6 +38,7 @@ class Login extends Component {
 
   render() {
     const { disabled, playerName, email } = this.state;
+    const { history } = this.props;
     return (
       <div>
         Login
@@ -62,6 +63,13 @@ class Login extends Component {
           onClick={ this.onClickBtn }
         >
           Play
+        </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ () => history.push('/config') }
+        >
+          Configurações
         </button>
       </div>
     );
