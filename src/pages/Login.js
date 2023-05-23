@@ -37,6 +37,7 @@ class Login extends Component {
     const { token } = data;
     if (typeof token !== 'string') {
       localStorage.setItem('token', JSON.stringify(token));
+      history.push('/');
     } else {
       localStorage.setItem('token', token);
     }
