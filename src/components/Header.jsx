@@ -5,18 +5,18 @@ import md5 from 'crypto-js/md5';
 
 class Header extends React.Component {
   render() {
-    const { playerName, email } = this.props;
+    const { name, gravatarEmail } = this.props;
     return (
       <div>
         <img
           data-testid="header-profile-picture"
-          src={ `https://www.gravatar.com/avatar/${md5(email).toString()}` }
+          src={ `https://www.gravatar.com/avatar/${md5(gravatarEmail).toString()}` }
           alt="Gravatar"
         />
         <span data-testid="header-player-name">
           Username:
           {' '}
-          {playerName}
+          {name}
         </span>
         <span data-testid="header-score">
           Placar:
@@ -29,8 +29,8 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  playerName: state.playerInfo.playerName,
-  email: state.playerInfo.email,
+  name: state.playerInfo.player.name,
+  gravatarEmail: state.playerInfo.player.gravatarEmail,
 });
 
 Header.propTypes = ({
