@@ -1,21 +1,24 @@
 import { SAVE_USERNAME } from '../actions';
 
 const INITIAL_STATE = {
-  playerName: '',
-  email: '',
+  player: {
+    name:'',
+    gravatarEmail:'',
+  }
 };
 
-const playerInfo = (state = INITIAL_STATE, action) => {
+const player = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case SAVE_USERNAME:
     return {
       ...state,
-      playerName: action.playerName,
-      email: action.email,
+      player:{
+        name: action.playerName,
+        gravatarEmail: action.email},
     };
   default:
     return state;
   }
 };
 
-export default playerInfo;
+export default player;
