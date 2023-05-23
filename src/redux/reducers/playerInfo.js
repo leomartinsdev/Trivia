@@ -2,9 +2,9 @@ import { SAVE_USERNAME } from '../actions';
 
 const INITIAL_STATE = {
   player: {
-    name:'',
-    gravatarEmail:'',
-  }
+    name: '',
+    gravatarEmail: '',
+  },
 };
 
 const player = (state = INITIAL_STATE, action) => {
@@ -12,9 +12,9 @@ const player = (state = INITIAL_STATE, action) => {
   case SAVE_USERNAME:
     return {
       ...state,
-      player:{
+      player: {
         name: action.playerName,
-        gravatarEmail: action.email},
+        gravatarEmail: action.email },
     };
   default:
     return state;

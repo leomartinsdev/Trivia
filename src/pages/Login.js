@@ -36,7 +36,7 @@ class Login extends Component {
     const data = await response.json();
     const { token } = data;
     if (typeof token !== 'string') {
-      localStorage.setItem('token', JSON.stringify(token))
+      localStorage.setItem('token', JSON.stringify(token));
     } else {
       localStorage.setItem('token', token);
     }
