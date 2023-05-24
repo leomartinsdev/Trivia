@@ -112,7 +112,7 @@ class Questions extends Component {
     if (!questions) { // se não tiver nenhuma questão, renderiza um erro. Isso acontecerá no caso do token estar expirado
       return <p>Error</p>;
     }
-    const { questionsSort, correct, answered, timer, isDisabled } = this.state;
+    const { questionsSort, correct, answered, timer, isDisabled, indice } = this.state;
 
     const answerButtons = questionsSort.map((answer, index) => {
       let buttonClass = 'answer-button';
@@ -140,8 +140,8 @@ class Questions extends Component {
       <div>
         {questions.length > 0 && (
           <div>
-            <p data-testid="question-category">{questions[0].category}</p>
-            <p data-testid="question-text">{questions[0].question}</p>
+            <p data-testid="question-category">{questions[indice].category}</p>
+            <p data-testid="question-text">{questions[indice].question}</p>
             <div>
               <div data-testid="answer-options">{answerButtons}</div>
             </div>
