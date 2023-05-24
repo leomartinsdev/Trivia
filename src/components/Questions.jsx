@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import '../CSS/Jogo.css';
 
 export default class Questions extends Component {
   state = {
@@ -7,6 +8,7 @@ export default class Questions extends Component {
     questionsSort: [],
     correct: '',
     selectedAnswer: null,
+    answered: false,
   };
 
   componentDidUpdate() {
@@ -32,7 +34,10 @@ export default class Questions extends Component {
   };
 
   handleAnswerClick = (answer) => {
-    this.setState({ selectedAnswer: answer });
+    const { selectedAnswer } = this.state;
+    if (selectedAnswer === null) {
+      this.setState({ selectedAnswer: answer, answered: true });
+    }
   };
 
   render() {
@@ -40,7 +45,28 @@ export default class Questions extends Component {
     if (!questions) {
       return <p>Error</p>;
     }
-    const { questionsSort, correct, selectedAnswer } = this.state;
+    const { questionsSort, correct, answered } = this.state;
+
+    const answerButtons = questionsSort.map((answer, index) => {
+      let buttonClass = 'answer-button';
+      if (answered) {
+        buttonClass += answer === correct ? ' correct' : ' wrong';
+      }
+
+      return (
+        <button
+          onClick={ () => this.handleAnswerClick(answer) }
+          key={ index }
+          className={ buttonClass }
+          value={ answer }
+          data-testid={
+            answer === correct ? 'correct-answer' : `wrong-answer-${index}`
+          }
+        >
+          {answer}
+        </button>
+      );
+    });
 
     return (
       <div>
@@ -49,31 +75,7 @@ export default class Questions extends Component {
             <p data-testid="question-category">{questions[0].category}</p>
             <p data-testid="question-text">{questions[0].question}</p>
             <div>
-              <div data-testid="answer-options">
-                {questionsSort.map((answer, index) => (
-                  <button
-                    onClick={ () => this.handleAnswerClick(answer) }
-                    key={ index }
-                    className="answer-button"
-                    value={ answer }
-                    style={ {
-                      border:
-                        selectedAnswer === null
-                          ? ''
-                          : answer === correct
-                            ? '3px solid rgb(6, 240, 15)'
-                            : '3px solid red',
-                    } }
-                    data-testid={
-                      answer === correct
-                        ? 'correct-answer'
-                        : `wrong-answer-${index}`
-                    }
-                  >
-                    {answer}
-                  </button>
-                ))}
-              </div>
+              <div data-testid="answer-options">{answerButtons}</div>
             </div>
           </div>
         )}
