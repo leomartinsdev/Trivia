@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import '../CSS/Jogo.css';
 
+const oneSecond = 1000; // define 1 segundo
+const thirtySeconds = 30000; // define 30 segundos
+
 export default class Questions extends Component {
   state = {
     shuffler: true,
@@ -9,26 +12,47 @@ export default class Questions extends Component {
     correct: '',
     selectedAnswer: null,
     answered: false,
+    isDisabled: false,
+    timer: 30,
+    interval: setInterval(() => {
+      this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    }, oneSecond),
   };
+
+  componentDidMount() {
+    const { interval } = this.state;
+    setTimeout(() => {
+      this.changeToDisabled();
+      clearInterval(interval);
+    }, thirtySeconds);
+  }
 
   componentDidUpdate() {
     this.shufflerCondition();
   }
 
+  changeToDisabled = () => {
+    this.setState({
+      isDisabled: true,
+    });
+  };
+
   shufflerCondition = () => {
     const { questions } = this.props;
-    const eachQuestion = questions[0];
+    const eachQuestion = questions[0]; // pega a primeira questão do array de 5 questões
     const { shuffler } = this.state;
-    const correctAnswer = eachQuestion.correct_answer;
+    const correctAnswer = eachQuestion.correct_answer; // atribui a resposta certa a essa variável
     const incorrectAnswers = eachQuestion.incorrect_answers;
     const fisherYates = 0.5;
     if (shuffler) {
       const shuffledAnswers = [...incorrectAnswers, correctAnswer]
-        .sort(() => Math.random() - fisherYates);
+        .sort(() => Math.random() - fisherYates); // cria um array com as respostas embaralhadas (as certas e as erradas)
       this.setState({
-        questionsSort: shuffledAnswers,
-        shuffler: false,
-        correct: correctAnswer,
+        questionsSort: shuffledAnswers, // atribui ao localState questionsSort as respostas embaralhadas
+        shuffler: false, // muda o shuffler para false (ele começa como true)
+        correct: correctAnswer, // atribui ao localState correct a resposta certa
       });
     }
   };
@@ -42,10 +66,10 @@ export default class Questions extends Component {
 
   render() {
     const { questions } = this.props;
-    if (!questions) {
+    if (!questions) { // se não tiver nenhuma questão, renderiza um erro. Isso acontecerá no caso do token estar expirado
       return <p>Error</p>;
     }
-    const { questionsSort, correct, answered } = this.state;
+    const { questionsSort, correct, answered, timer, isDisabled } = this.state;
 
     const answerButtons = questionsSort.map((answer, index) => {
       let buttonClass = 'answer-button';
@@ -57,6 +81,7 @@ export default class Questions extends Component {
         <button
           onClick={ () => this.handleAnswerClick(answer) }
           key={ index }
+          disabled={ isDisabled }
           className={ buttonClass }
           value={ answer }
           data-testid={
@@ -77,6 +102,11 @@ export default class Questions extends Component {
             <div>
               <div data-testid="answer-options">{answerButtons}</div>
             </div>
+            <span>
+              Timer:
+              {' '}
+              { timer }
+            </span>
           </div>
         )}
       </div>
