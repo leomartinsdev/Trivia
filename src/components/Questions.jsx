@@ -18,6 +18,7 @@ class Questions extends Component {
     answered: false,
     isDisabled: false,
     timer: 30,
+    indice: 0,
     interval: setInterval(() => {
       this.setState((prevState) => ({
         timer: prevState.timer - 1,
@@ -45,8 +46,8 @@ class Questions extends Component {
 
   shufflerCondition = () => {
     const { questions } = this.props;
-    const eachQuestion = questions[0]; // pega a primeira questão do array de 5 questões
-    const { shuffler } = this.state;
+    const { shuffler, indice } = this.state;
+    const eachQuestion = questions[indice]; // pega a primeira questão do array de 5 questões
     const correctAnswer = eachQuestion.correct_answer; // atribui a resposta certa a essa variável
     const incorrectAnswers = eachQuestion.incorrect_answers;
     const fisherYates = 0.5;
@@ -91,12 +92,27 @@ class Questions extends Component {
     }
   };
 
+  handleClickNext = () => {
+    const { indice } = this.state;
+    const { questions } = this.props;
+    if (indice === questions.length - 1) {
+      this.setState(() => ({
+        indice: 4,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        indice: prevState.indice + 1,
+        shuffler: true,
+      }));
+    }
+  };
+
   render() {
     const { questions } = this.props;
     if (!questions) { // se não tiver nenhuma questão, renderiza um erro. Isso acontecerá no caso do token estar expirado
       return <p>Error</p>;
     }
-    const { questionsSort, correct, answered, timer, isDisabled } = this.state;
+    const { questionsSort, correct, answered, timer, isDisabled, indice } = this.state;
 
     const answerButtons = questionsSort.map((answer, index) => {
       let buttonClass = 'answer-button';
@@ -124,8 +140,8 @@ class Questions extends Component {
       <div>
         {questions.length > 0 && (
           <div>
-            <p data-testid="question-category">{questions[0].category}</p>
-            <p data-testid="question-text">{questions[0].question}</p>
+            <p data-testid="question-category">{questions[indice].category}</p>
+            <p data-testid="question-text">{questions[indice].question}</p>
             <div>
               <div data-testid="answer-options">{answerButtons}</div>
             </div>
@@ -134,6 +150,16 @@ class Questions extends Component {
               {' '}
               { timer }
             </span>
+            {
+              answered && (
+                <button
+                  data-testid="btn-next"
+                  onClick={ this.handleClickNext }
+                >
+                  Next
+                </button>
+              )
+            }
           </div>
         )}
       </div>
