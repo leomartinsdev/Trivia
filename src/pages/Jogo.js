@@ -33,7 +33,8 @@ class Jogo extends React.Component {
     return (
       <div>
         <Header />
-        <Questions questions={ questions } />
+        {questions.length > 0
+        && <Questions questions={ questions } />}
       </div>
     );
   }

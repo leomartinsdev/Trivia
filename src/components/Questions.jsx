@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import '../CSS/Jogo.css';
+import { connect } from 'react-redux';
+import { saveScore } from '../redux/actions';
 
 const oneSecond = 1000; // define 1 segundo
 const thirtySeconds = 30000; // define 30 segundos
 
-export default class Questions extends Component {
+// 10 + (timer * dificuldade) fórmula pontuação
+
+class Questions extends Component {
   state = {
     shuffler: true,
     questionsSort: [],
@@ -57,10 +61,33 @@ export default class Questions extends Component {
     }
   };
 
+  sumPoints = () => {
+    const { timer } = this.state;
+    const { questions } = this.props;
+    const eachQuestion = questions[0];
+    const ten = 10;
+    const two = 2;
+    const three = 3;
+
+    if (eachQuestion.difficulty === 'hard') {
+      return ten + (timer * three);
+    } if (eachQuestion.difficulty === 'medium') {
+      return ten + (timer * two);
+    } if (eachQuestion.difficulty === 'easy') {
+      return ten + timer;
+    }
+    return 0;
+  };
+
   handleAnswerClick = (answer) => {
     const { selectedAnswer } = this.state;
-    if (selectedAnswer === null) {
-      this.setState({ selectedAnswer: answer, answered: true });
+    const { questions, dispatch } = this.props;
+    const eachQuestion = questions[0];
+    const correctAnswer = eachQuestion.correct_answer;
+    this.setState({ selectedAnswer: answer, answered: true });
+    if (answer === correctAnswer) {
+      console.log('cliquei', selectedAnswer);
+      dispatch(saveScore(this.sumPoints()));
     }
   };
 
@@ -117,3 +144,5 @@ export default class Questions extends Component {
 Questions.propTypes = ({
   questions: propTypes.arrayOf,
 }).isRequired;
+
+export default connect()(Questions);
