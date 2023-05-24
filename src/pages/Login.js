@@ -42,7 +42,7 @@ class Login extends Component {
       localStorage.setItem('token', token);
     }
     history.push('/jogo');
-    dispatch(saveUserInfo(playerName, email));
+    dispatch(saveUserInfo(playerName, email, 0));
   };
 
   render() {

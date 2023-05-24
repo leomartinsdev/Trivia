@@ -1,10 +1,9 @@
-import { SAVE_USERNAME } from '../actions';
+import { SAVE_USERNAME, TOTAL_SCORE } from '../actions';
 
 const INITIAL_STATE = {
-  player: {
-    name: '',
-    gravatarEmail: '',
-  },
+  name: '',
+  gravatarEmail: '',
+  score: 0,
 };
 
 const player = (state = INITIAL_STATE, action) => {
@@ -12,9 +11,14 @@ const player = (state = INITIAL_STATE, action) => {
   case SAVE_USERNAME:
     return {
       ...state,
-      player: {
-        name: action.playerName,
-        gravatarEmail: action.email },
+      name: action.playerName,
+      gravatarEmail: action.email,
+      score: action.points,
+    };
+  case TOTAL_SCORE:
+    return {
+      ...state,
+      score: action.points,
     };
   default:
     return state;
