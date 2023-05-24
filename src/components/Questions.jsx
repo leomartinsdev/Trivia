@@ -18,6 +18,7 @@ class Questions extends Component {
     answered: false,
     isDisabled: false,
     timer: 30,
+    indice: 0,
     interval: setInterval(() => {
       this.setState((prevState) => ({
         timer: prevState.timer - 1,
@@ -45,8 +46,8 @@ class Questions extends Component {
 
   shufflerCondition = () => {
     const { questions } = this.props;
-    const eachQuestion = questions[0]; // pega a primeira questão do array de 5 questões
-    const { shuffler } = this.state;
+    const { shuffler, indice } = this.state;
+    const eachQuestion = questions[indice]; // pega a primeira questão do array de 5 questões
     const correctAnswer = eachQuestion.correct_answer; // atribui a resposta certa a essa variável
     const incorrectAnswers = eachQuestion.incorrect_answers;
     const fisherYates = 0.5;
@@ -88,6 +89,21 @@ class Questions extends Component {
     if (answer === correctAnswer) {
       console.log('cliquei', selectedAnswer);
       dispatch(saveScore(this.sumPoints()));
+    }
+  };
+
+  handleClickNext = () => {
+    const { indice } = this.state;
+    const { questions } = this.props;
+    if (indice === questions.length - 1) {
+      this.setState(() => ({
+        indice: 4,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        indice: prevState.indice + 1,
+        shuffler: true,
+      }));
     }
   };
 
