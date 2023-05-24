@@ -150,6 +150,16 @@ class Questions extends Component {
               {' '}
               { timer }
             </span>
+            {
+              answered && (
+                <button
+                  data-testid="btn-next"
+                  onClick={ this.handleClickNext }
+                >
+                  Next
+                </button>
+              )
+            }
           </div>
         )}
       </div>
