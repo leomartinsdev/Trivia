@@ -13,12 +13,11 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.playerName,
       gravatarEmail: action.email,
-      score: action.points,
     };
   case TOTAL_SCORE:
     return {
       ...state,
-      score: action.points,
+      score: state.score + action.points, // acumula a pontuação
     };
   default:
     return state;
