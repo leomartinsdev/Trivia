@@ -27,14 +27,18 @@ class Jogo extends React.Component {
       .catch(() => history.push('/'));
   }
 
+  callHistory = () => {
+    const { history } = this.props;
+    history.push('feedback');
+  };
+
   render() {
     const { questions } = this.state;
-    console.log(questions);
     return (
       <div>
         <Header />
         {questions.length > 0
-        && <Questions questions={ questions } />}
+        && <Questions callHistory={ this.callHistory } questions={ questions } />}
       </div>
     );
   }

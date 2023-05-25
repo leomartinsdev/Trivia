@@ -32,6 +32,7 @@ class Questions extends Component {
       this.changeToDisabled();
       clearInterval(interval);
     }, thirtySeconds);
+    this.shufflerCondition();
   }
 
   componentDidUpdate() {
@@ -63,28 +64,31 @@ class Questions extends Component {
   };
 
   sumPoints = () => {
-    const { timer } = this.state;
+    const { timer, indice } = this.state;
     const { questions } = this.props;
-    const eachQuestion = questions[0];
+    const currentQuestion = questions[indice];
     const ten = 10;
     const two = 2;
     const three = 3;
 
-    if (eachQuestion.difficulty === 'hard') {
-      return ten + (timer * three);
-    } if (eachQuestion.difficulty === 'medium') {
-      return ten + (timer * two);
-    } if (eachQuestion.difficulty === 'easy') {
-      return ten + timer;
+    let points = 0;
+
+    if (currentQuestion.difficulty === 'hard') {
+      points = ten + (timer * three);
+    } else if (currentQuestion.difficulty === 'medium') {
+      points = ten + (timer * two);
+    } else if (currentQuestion.difficulty === 'easy') {
+      points = ten + timer;
     }
-    return 0;
+
+    return points;
   };
 
   handleAnswerClick = (answer) => {
-    const { selectedAnswer } = this.state;
+    const { selectedAnswer, indice } = this.state;
     const { questions, dispatch } = this.props;
-    const eachQuestion = questions[0];
-    const correctAnswer = eachQuestion.correct_answer;
+    const currentQuestion = questions[indice];
+    const correctAnswer = currentQuestion.correct_answer;
     this.setState({ selectedAnswer: answer, answered: true });
     if (answer === correctAnswer) {
       console.log('cliquei', selectedAnswer);
@@ -94,11 +98,15 @@ class Questions extends Component {
 
   handleClickNext = () => {
     const { indice } = this.state;
-    const { questions } = this.props;
+    const { questions, callHistory } = this.props;
+    this.setState({
+      timer: 30,
+    });
     if (indice === questions.length - 1) {
       this.setState(() => ({
         indice: 4,
       }));
+      callHistory();
     } else {
       this.setState((prevState) => ({
         indice: prevState.indice + 1,
