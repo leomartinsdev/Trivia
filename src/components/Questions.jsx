@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import '../CSS/Jogo.css';
 import { connect } from 'react-redux';
-import { saveScore } from '../redux/actions';
+import { saveScore, saveAssertions } from '../redux/actions';
 
 const oneSecond = 1000; // define 1 segundo
 const thirtySeconds = 30000; // define 30 segundos
@@ -93,6 +93,7 @@ class Questions extends Component {
     if (answer === correctAnswer) {
       console.log('cliquei', selectedAnswer);
       dispatch(saveScore(this.sumPoints()));
+      dispatch(saveAssertions());
     }
   };
 
